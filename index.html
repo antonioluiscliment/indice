@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Índice de proyectos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0F2438;
+    --navy-line: #23415C;
+    --paper: #F1EEE4;
+    --ink: #E8E6DC;
+    --ink-dim: #9FB2C4;
+    --stamp: #E2572B;
+    --stamp-dim: #C4441E;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--navy);
+    background-image:
+      linear-gradient(var(--navy-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--navy-line) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: -1px -1px;
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 20px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  .sheet {
+    width: 100%;
+    max-width: 880px;
+  }
+
+  .crosshair {
+    position: fixed;
+    width: 22px;
+    height: 22px;
+    opacity: 0.35;
+  }
+  .crosshair::before, .crosshair::after {
+    content: '';
+    position: absolute;
+    background: var(--ink-dim);
+  }
+  .crosshair::before { width: 100%; height: 1px; top: 50%; }
+  .crosshair::after { height: 100%; width: 1px; left: 50%; }
+  .crosshair.tl { top: 24px; left: 24px; }
+  .crosshair.tr { top: 24px; right: 24px; }
+  .crosshair.bl { bottom: 24px; left: 24px; }
+  .crosshair.br { bottom: 24px; right: 24px; }
+
+  .titleblock {
+    border: 1px solid var(--navy-line);
+    padding: 28px 32px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .titleblock .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+  }
+
+  .titleblock h1 {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 800;
+    font-size: clamp(34px, 6vw, 54px);
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    line-height: 1.02;
+    margin: 10px 0 16px;
+    color: #FBFAF6;
+  }
+
+  .titleblock p {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink-dim);
+    max-width: 56ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    gap: 28px;
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1px solid var(--navy-line);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-dim);
+    flex-wrap: wrap;
+  }
+  .meta-row span b { color: var(--ink); font-weight: 500; }
+
+  .register-head {
+    display: grid;
+    grid-template-columns: 56px 1fr 40px;
+    gap: 18px;
+    padding: 0 20px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+
+  .register {
+    border-top: 1px solid var(--navy-line);
+  }
+
+  .project {
+    display: grid;
+    grid-template-columns: 56px 1fr 40px;
+    gap: 18px;
+    align-items: center;
+    padding: 22px 20px;
+    border-bottom: 1px solid var(--navy-line);
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    transition: background 0.18s ease, padding-left 0.18s ease;
+  }
+
+  .project:hover, .project:focus-visible {
+    background: rgba(226, 87, 43, 0.07);
+    padding-left: 28px;
+  }
+  .project:focus-visible { outline: 2px solid var(--stamp); outline-offset: -2px; }
+
+  .project .num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    color: var(--stamp);
+    font-weight: 500;
+  }
+
+  .project .title {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 600;
+    font-size: 21px;
+    letter-spacing: 0.01em;
+    color: #FBFAF6;
+    text-transform: uppercase;
+  }
+
+  .project .desc {
+    font-size: 13.5px;
+    color: var(--ink-dim);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  .project .arrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 18px;
+    color: var(--ink-dim);
+    transition: transform 0.18s ease, color 0.18s ease;
+  }
+  .project:hover .arrow, .project:focus-visible .arrow {
+    transform: translateX(4px);
+    color: var(--stamp);
+  }
+
+  footer {
+    max-width: 880px;
+    width: 100%;
+    margin-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-dim);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .stamp-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--stamp-dim);
+    color: var(--stamp);
+    padding: 4px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .stamp-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--stamp);
+    border-radius: 50%;
+  }
+</style>
+</head>
+<body>
+
+  <div class="crosshair tl"></div>
+  <div class="crosshair tr"></div>
+  <div class="crosshair bl"></div>
+  <div class="crosshair br"></div>
+
+  <div class="sheet">
+    <div class="titleblock">
+      <div class="eyebrow">Registro de planos · Rev. A</div>
+      <h1>Índice de proyectos</h1>
+      <p>Selecciona un proyecto para abrir su documentación técnica en una nueva pestaña.</p>
+      <div class="meta-row">
+        <span>Nº de láminas: <b>04</b></span>
+        <span>Escala: <b>N/A</b></span>
+        <span>Estado: <b>Activo</b></span>
+      </div>
+    </div>
+
+    <div class="register-head">
+      <span>Lám.</span>
+      <span>Proyecto</span>
+      <span></span>
+    </div>
+
+    <nav class="register" aria-label="Listado de proyectos">
+      <a class="project" href="https://bajo-vivienda.vercel.app/" target="_blank" rel="noopener noreferrer">
+        <span class="num">01</span>
+        <span>
+          <span class="title">Parque de actividad económica Norte de Murcia</span>
+          <span class="desc">Segunda etapa</span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="project" href="https://cambio-uso.vercel.app/" target="_blank" rel="noopener noreferrer">
+        <span class="num">02</span>
+        <span>
+          <span class="title">Cambio de uso de un local comercial</span>
+          <span class="desc">Adecuación normativa y funcional</span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="project" href="https://bajo-five.vercel.app/" target="_blank" rel="noopener noreferrer">
+        <span class="num">03</span>
+        <span>
+          <span class="title">Alternativas al plano de planta</span>
+          <span class="desc">Estudio comparativo de distribución</span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="project" href="https://fondo-ia-web.vercel.app/" target="_blank" rel="noopener noreferrer">
+        <span class="num">04</span>
+        <span>
+          <span class="title">Selección de valores de renta variable</span>
+          <span class="desc">Composición de cartera de inversión</span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+    </nav>
+  </div>
+
+  <footer>
+    <span class="stamp-badge">Documentación viva</span>
+    <span>© <span id="year"></span> · Índice de proyectos</span>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
